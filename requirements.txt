@@ -1,1 +1,9 @@
+import sys
+import os
 
+This will be used to test cases in test_assignment_2 using functions from assignment_2:
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+from src.main.assignment_2 import * (this will help include everything in the function file for testing)
+
+import numpy
