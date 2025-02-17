@@ -29,42 +29,50 @@ def NewtonForward(x,y,x_value):
         for j in range(1,i+1):
                 N[i][j] = (N[i][j-1] - N[i-1][j-1]) / (x[i] - x[i-j])
                 
+                
+    # Below is the formula for Newton's Forward Approximations
 
-    h = x[1] - x[0]               # Interval size
-    u = (x_value - x[0]) / h        # Calculating u
-    approx = y[0]              # Initial approximation (y0)
+    h = x[1] - x[0]         # Interval size
+    u = (x_value - x[0]) / h   # Calculating u
+    approx = y[0] # Initial approximation (y0)
     u_term = 1
     factorial = 1
 
     for j in range(1, n):
         u_term *= (u - (j - 1))  # u(u-1)(u-2)...
-        factorial *= j             # Factorial: 1!, 2!, 3!...
-        approx += (u_term / factorial) * N[0][j]
+        factorial *= j # Factorial: 1!, 2!, 3!...
+        approx += (u_term * N[i][j]) / factorial
+        approx += u_term # Adding the term (previous) to approximation
     
+    # 1st, 2nd, 3rd degree values with approximating value at x = 7.3
     print(f"{N[1][1]}\n{N[2][2]}\n{N[3][3]}\n\n\nProblem 3: Approximate f(7.3)\n{approx}")
 
 def DivDiff(x,y,y_p):
     n = len(x)
     
     z = [xi for xi in x for _ in (0, 1)] # Duplicates the x value parameter
-    O = [[0 for _ in range(2*n)] for _ in range(2*n)] # This will duplicate the values inside the matrix
+    # The array (similar to M and N) will duplicate the values inside the matrix due to the presence of 2
+    O = [[0 for _ in range(2*n)] for _ in range(2*n)]
     
     for i in range(n):
+        # Duplicate x and y values respectively
         O[2*i][0] = y[i]
         O[2*i+1][0] = y[i]
         
+        # 3rd column derivatives
         O[2*i+1][1] = y_p[i]
         if (i != 0):
             O[2*i][1] = (O[2*i][0] - O[2*i-1][0]) / (z[2*i] - z[2*i-1])
         
+        # Iterate by column, then by row for 4th and 5th column values
     for j in range(2,2*n):
         for i in range(j,2*n):
             O[i][j] = (O[i][j - 1] - O[i - 1][j - 1]) / (z[i] - z[i - j])
                 
 
     for i in range(2 * n):
-        DivValueRows = f"[{z[i]:1e}  " + "  ".join(f"{O[i][j]:1e}" for j in range(2 * n - 2)) + "]" # -2 removes the last 2 columns
-        print(DivValueRows)
+        DivValues = f"[{z[i]:1e}  " + "  ".join(f"{O[i][j]:1e}" for j in range(2 * n - 2)) + "]" # -2 removes the last 2 columns
+        print(DivValues)
 
 
 def CubicSpline(x_v,y_v):
@@ -80,14 +88,14 @@ def CubicSpline(x_v,y_v):
     # Boundary conditions (top and bottom row are all 0s except 1 in first and last position)
     A[0, 0], A[-1, -1] = 1, 1  
 
-    # Fill the matrix A and vector B
+    # Fill in matrix A and vector B
     for i in range(1, n):
         A[i,i-1] = h[i-1]
         A[i,i] = 2 * (h[i-1] + h[i])
         A[i,i+1] = h[i]
         B[i] = (6 * ((y[i+1] - y[i]) / h[i] - (y[i] - y[i-1]) / h[i-1])) / 2
 
-    # Solve for vector x
+    # Solving vector x
     x = np.linalg.solve(A, B)
     
     for row in A:
