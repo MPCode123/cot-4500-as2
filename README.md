@@ -6,3 +6,5 @@ The following assignment explains the utilization of 4 different methods for pol
 - The code is done on Python 3.11 on Eclipse, uploaded to Github
 - To run the script: python test_assignment_2.py (this is where all the test cases are)
 - You may view the files uploaded to ensure proper running efficiency
+
+**Note: Code is inspired by the COT4500 powerpoint slides** 
